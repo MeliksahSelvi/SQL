@@ -33,5 +33,11 @@ SELECT MIN(replacement_cost) FROM film
 SELECT customer.customer_id,customer.first_name,customer.last_name,COUNT(payment.customer_id) FROM payment
 INNER JOIN customer ON payment.customer_id=customer.customer_id
 GROUP BY customer.customer_id,customer.first_name,customer.last_name
-ORDER BY COUNT(payment.customer_id) DESC;
+HAVING COUNT(payment.customer_id)=
+(
+    SELECT COUNT(customer_id) FROM payment
+    GROUP BY customer_id
+    ORDER BY COUNT(customer_id) DESC
+    LIMIT 1
+);
 ```
